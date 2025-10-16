@@ -33,12 +33,18 @@ const suiClient = new SuiClient({ url: rpcUrl });
  * RESOURCES:
  * - https://sdk.mystenlabs.com/typescript/transaction-building/basics#transactions
  */
+
+
+
+
+
 const main = async () => {
   /**
    * Task 1:
    *
    * Create a new Transaction instance from the @mysten/sui/transactions module.
    */
+  const tx = new Transaction();
 
   /**
    * Task 2:
@@ -52,6 +58,9 @@ const main = async () => {
    * any arguments or type arguments.
    */
 
+const [suiNFT] = tx.moveCall({
+  target: `${PACKAGE_ID}::sui_nft::new`,
+});
   /**
    * Task 3:
    *
@@ -62,7 +71,7 @@ const main = async () => {
    * HINT: Use `suiAddress`` to transfer the object to your address.
    */
 
-
+tx.transferObjects([suiNFT], suiAddress);
   /**
    * Task 4:
    *
@@ -71,7 +80,11 @@ const main = async () => {
    * Print the result to the console.
    */
 
-
+const result = await suiClient.signAndExecuteTransaction({
+  signer: keypair,
+  transaction: tx,
+});
+console.log({result});
   /**
    * Task 5: Run the script with the command below and ensure it works!
    * 
